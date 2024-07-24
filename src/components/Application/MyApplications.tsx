@@ -30,12 +30,12 @@ const MyApplications: React.FC = () => {
     const fetchApplications = async () => {
       try {
         if (user && user.role === "Employer") {
-          const res = await axios.get("http://localhost:4000/api/v1/application/employerAll", {
+          const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/application/employerAll`, {
             withCredentials: true,
           });
           setApplications(res.data.applications);
         } else {
-          const res = await axios.get("http://localhost:4000/api/v1/application/jobSeekerAll", {
+          const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/application/jobSeekerAll`, {
             withCredentials: true,
           });
           setApplications(res.data.applications);
@@ -56,7 +56,7 @@ const MyApplications: React.FC = () => {
 
   const deleteApplication = async (id: string) => {
     try {
-      const res = await axios.delete(`http://localhost:4000/api/v1/application/${id}`, {
+      const res = await axios.delete(`${import.meta.env.VITE_SERVER}/api/v1/application/${id}`, {
         withCredentials: true,
       });
       toast.success(res.data.message);

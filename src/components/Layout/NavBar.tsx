@@ -12,7 +12,7 @@ const NavBar = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await axios.post("http://localhost:4000/api/v1/user/logout", {}, { withCredentials: true });
+            const response = await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/user/logout`, {}, { withCredentials: true });
             toast.success(response.data.message);
             setIsAuthorized(false);
             navigate("/login");

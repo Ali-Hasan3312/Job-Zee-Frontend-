@@ -39,7 +39,7 @@ const Application: React.FC = () => {
 
    
       await axios.post(
-        "http://localhost:4000/api/v1/application/create",
+        `${import.meta.env.VITE_SERVER}/api/v1/application/create`,
         formData,
         {
           withCredentials: true,

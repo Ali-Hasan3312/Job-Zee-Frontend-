@@ -27,7 +27,7 @@ const Jobs = () => {
   useEffect(() => {
     try {
       axios
-        .get("http://localhost:4000/api/v1/job/getAll", {
+        .get(`${import.meta.env.VITE_SERVER}/api/v1/job/getAll`, {
           withCredentials: true,
         })
         .then((res) => {
