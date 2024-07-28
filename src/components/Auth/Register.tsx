@@ -1,4 +1,5 @@
 import axios from "axios";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FormEvent, useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPencilAlt, FaRegUser } from "react-icons/fa";
@@ -6,6 +7,7 @@ import { FaPhoneFlip } from "react-icons/fa6";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { Link, Navigate } from "react-router-dom";
+import { auth } from "../../firebase";
 import { Context } from "../../main";
 
 const Register = () => {
@@ -20,9 +22,10 @@ const Register = () => {
   const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const {user} = await createUserWithEmailAndPassword(auth,email,password)
       const { data } = await axios.post(
        `${import.meta.env.VITE_SERVER}/api/v1/user/register`,
-        { name, phone, email, role, password },
+        { name, phone, email, role, password,_id:user.uid },
         {
           headers: {
             "Content-Type": "application/json",
@@ -30,13 +33,13 @@ const Register = () => {
           withCredentials: true,
         }
       );
+      setIsAuthorized(true);
       toast.success(data.message);
       setName("");
       setEmail("");
       setPassword("");
       setPhone("");
       setRole("");
-      setIsAuthorized(true);
     } catch (error: any) {
       toast.error(error.response.data.message);
     }
@@ -94,7 +97,7 @@ const Register = () => {
               <label>Phone Number</label>
               <div>
                 <input
-                  type="number"
+                  type="text"
                   placeholder="12345678"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}

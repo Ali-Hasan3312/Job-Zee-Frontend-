@@ -17,23 +17,24 @@ import { useContext, useEffect } from 'react'
 import { Context } from './main'
 import axios from 'axios'
 import Footer from './components/Layout/Footer'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from './firebase'
 
 function App() {
   const { isAuthorized, setIsAuthorized, setUser} = useContext(Context);
 
   useEffect(()=>{
-  const fetchUser = async()=>{
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/user/getUser`, { withCredentials: true});
-      setUser(response.data.user);
-      setIsAuthorized(true);
-    } catch (error) {
-      setIsAuthorized(false)
-    }
+    onAuthStateChanged(auth, async (user) => {
+      if(user){
 
-  } 
-  fetchUser()
+        const response = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/user/getUser/${user.uid}`, { withCredentials: true});
+        setUser(response.data.user);
+        setIsAuthorized(true);
+      }else{
 
+        setIsAuthorized(false)
+      }
+    });
   }, [isAuthorized])
   return (
    
@@ -45,10 +46,10 @@ function App() {
       <Route path='/' element={<Home />} />
       <Route path='/job/getall' element={<Jobs />} />
       <Route path='/job/:id' element={<JobDetails />} />
-      <Route path='/job/post' element={<PostJob />} />
-      <Route path='/job/me' element={<MyJobs />} />
+      <Route path='/job/post/:id' element={<PostJob />} />
+      <Route path='/job/me/:id' element={<MyJobs />} />
       <Route path='/application/:id' element={<Application />} />
-      <Route path='/application/me' element={<MyApplications />} />
+      <Route path='/application/me/:id' element={<MyApplications />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
     <Footer />

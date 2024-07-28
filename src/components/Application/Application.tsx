@@ -35,11 +35,12 @@ const Application: React.FC = () => {
     if (resume) {
       formData.append("resume", resume);
     }
+    formData.append("userId", user?._id!);
     formData.append("jobId", id!);
 
    
       await axios.post(
-        `${import.meta.env.VITE_SERVER}/api/v1/application/create`,
+        `${import.meta.env.VITE_SERVER}/api/v1/application/create/${id}`,
         formData,
         {
           withCredentials: true,
@@ -60,7 +61,7 @@ const Application: React.FC = () => {
       }).catch((error)=>{
 
        toast.error(error.response.data.message)
-       console.log(error);
+      
        
       })
     
@@ -89,7 +90,7 @@ const Application: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            type="number"
+            type="text"
             placeholder="Your Phone Number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}

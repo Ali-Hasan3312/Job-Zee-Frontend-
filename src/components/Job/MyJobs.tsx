@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaCheck } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../main";
 
 type job =
@@ -27,14 +27,13 @@ const MyJobs = () => {
   const [myJobs, setMyJobs] = useState<job[]>([]);
   const [editingMode, setEditingMode] = useState('');
   const { isAuthorized, user } = useContext(Context);
-
+ const {id} = useParams()
   const navigateTo = useNavigate();
-  //Fetching all jobs
   useEffect(() => {
     const fetchJobs = async () => {
      
          await axios.get(
-          `${import.meta.env.VITE_SERVER}/api/v1/job/myJobs`,
+          `${import.meta.env.VITE_SERVER}/api/v1/job/myJobs/${id}`,
           { withCredentials: true }
         ).then((res)=>{
           console.log(res.data.myJobs);
@@ -51,18 +50,14 @@ const MyJobs = () => {
     navigateTo("/");
   }
 
-  //Function For Enabling Editing Mode
   const handleEnableEdit = (jobId:string) => {
-    //Here We Are Giving Id in setEditingMode because We want to enable only that job whose ID has been send.
     setEditingMode(jobId);
   };
 
-  //Function For Disabling Editing Mode
   const handleDisableEdit = () => {
     setEditingMode('');
   };
 
-  //Function For Updating The Job
   const handleUpdateJob = async (jobId:string) => {
     const updatedJob = myJobs.find((job) => job._id === jobId);
     await axios

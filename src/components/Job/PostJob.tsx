@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FormEvent, useContext, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../main";
 const PostJob = () => {
   const [title, setTitle] = useState("");
@@ -16,7 +16,7 @@ const PostJob = () => {
   const [salaryType, setSalaryType] = useState("default");
 
   const { isAuthorized, user } = useContext(Context);
-
+ const {id} = useParams()
   const handleJobPost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (salaryType === "Fixed Salary") {
@@ -31,7 +31,7 @@ const PostJob = () => {
     }
     await axios
       .post(
-        `${import.meta.env.VITE_SERVER}/api/v1/job/post`,
+        `${import.meta.env.VITE_SERVER}/api/v1/job/post/${id}`,
         fixedSalary.length >= 4
           ? {
               title,

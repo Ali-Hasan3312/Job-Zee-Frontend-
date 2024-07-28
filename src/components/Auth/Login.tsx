@@ -6,20 +6,22 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { RiLock2Fill } from "react-icons/ri";
 import { Link, Navigate } from "react-router-dom";
 import { Context } from "../../main";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-
   const { isAuthorized, setIsAuthorized } = useContext(Context);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      await signInWithEmailAndPassword(auth,email,password)
       const { data } = await axios.post(
        `${import.meta.env.VITE_SERVER}/api/v1/user/login`,
-        { email, password, role },
+        { email, role },
         {
           headers: {
             "Content-Type": "application/json",
@@ -27,11 +29,11 @@ const Login = () => {
           withCredentials: true,
         }
       );
+      setIsAuthorized(true);
       toast.success(data.message);
       setEmail("");
       setPassword("");
       setRole("");
-      setIsAuthorized(true);
     } catch (error:any) {
       toast.error(error.response.data.message);
     }

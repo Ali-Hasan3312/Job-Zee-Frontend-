@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
 
-    const {isAuthorized} = useContext(Context)
+    const {user} = useContext(Context)
   return (
-   <footer className={isAuthorized? "footerShow" : "footerHide"}>
+   <footer className={user? "footerShow" : "footerHide"}>
    <div>&copy; All Rights Reserved By JobZee.</div>
    <div>
 

@@ -29,7 +29,8 @@ const JobDetails = () => {
     axios
       .get(`${import.meta.env.VITE_SERVER}/api/v1/job/${id}`, {
         withCredentials: true,
-      })
+        
+      },)
       .then((res) => {
         setJob(res.data.job);
       })

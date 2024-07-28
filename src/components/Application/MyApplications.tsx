@@ -30,12 +30,12 @@ const MyApplications: React.FC = () => {
     const fetchApplications = async () => {
       try {
         if (user && user.role === "Employer") {
-          const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/application/employerAll`, {
+          const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/application/employerAll/${user._id}`, {
             withCredentials: true,
           });
           setApplications(res.data.applications);
         } else {
-          const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/application/jobSeekerAll`, {
+          const res = await axios.get(`${import.meta.env.VITE_SERVER}/api/v1/application/jobSeekerAll/${user?._id}`, {
             withCredentials: true,
           });
           setApplications(res.data.applications);

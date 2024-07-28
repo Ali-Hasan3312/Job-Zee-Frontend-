@@ -7,8 +7,8 @@ import PopularCategories from "./PopularCategories";
 import PopularCompanies from "./PopularCompanies";
 
 const Home = () => {
-  const {isAuthorized} = useContext(Context);
-  if(!isAuthorized){
+  const {user} = useContext(Context);
+  if(!user){
     return <Navigate to={"/login"} />
   }
 

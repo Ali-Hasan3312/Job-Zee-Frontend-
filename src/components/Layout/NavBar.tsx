@@ -1,32 +1,32 @@
-import axios from "axios";
+import { signOut } from "firebase/auth";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
 import { Context } from "../../main";
 
 const NavBar = () => {
     const [show, setShow] = useState(false);
-    const { isAuthorized, setIsAuthorized, user } = useContext(Context);
+    const { setIsAuthorized, user,setUser } = useContext(Context);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/user/logout`, {}, { withCredentials: true });
-            toast.success(response.data.message);
-            setIsAuthorized(false);
-            navigate("/login");
-        } catch (error: any) {
-            toast.error(error.response.data.message);
-            
-        }
-    };
-
+        
+            await signOut(auth).then(()=>{
+                toast.success("User LoggedOut Successfully");
+                setIsAuthorized(false);
+                setUser(null)
+                navigate("/login");
+            }).catch((error)=>{
+                toast.error(error.message);
+            });
+    }
    
 
     return (
         <>
-            <nav className={isAuthorized ? "navbarShow" : "navbarHide"}>
+            <nav className={user ? "navbarShow" : "navbarHide"}>
                 <div className="container">
                     <div className="logo">
                         <img src="JobZee-logos__white.png" alt="logo" />
@@ -43,19 +43,19 @@ const NavBar = () => {
                             </Link>
                         </li>
                         <li>
-                            <Link to={"/application/me"} onClick={() => setShow(false)}>
+                            <Link to={`/application/me/${user?._id}`} onClick={() => setShow(false)}>
                                 {user && user.role === "Employer" ? "APPLICANT'S APPLICATIONS" : "MY APPLICATIONS"}
                             </Link>
                         </li>
                         {user && user.role === "Employer" ? (
                             <>
                                 <li>
-                                    <Link to={"/job/post"} onClick={() => setShow(false)}>
+                                    <Link to={`/job/post/${user._id}`} onClick={() => setShow(false)}>
                                         POST NEW JOB
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to={"/job/me"} onClick={() => setShow(false)}>
+                                    <Link to={`/job/me/${user._id}`} onClick={() => setShow(false)}>
                                         VIEW YOUR JOBS
                                     </Link>
                                 </li>

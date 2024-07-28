@@ -6,8 +6,8 @@ import { User } from './types/types.ts';
 interface ContextType {
   isAuthorized: boolean;
   setIsAuthorized: Dispatch<SetStateAction<boolean>>;
-  user: User;
-  setUser: Dispatch<SetStateAction<User>>;
+  user: User | null;
+  setUser: Dispatch<SetStateAction<User | null>>;
 }
 
 export const Context = createContext<ContextType>({
@@ -26,14 +26,7 @@ export const Context = createContext<ContextType>({
 
 const AppWrapper = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [user, setUser] = useState<User>({
-    name: "",
-    email: "",
-    phone: null,
-    password: "",
-    role: "",
-    _id: ""
-  });
+  const [user, setUser] = useState<User | null>(null);
 
   return (
     <Context.Provider value={{ isAuthorized, setIsAuthorized, user, setUser }}>
