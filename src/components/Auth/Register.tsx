@@ -33,13 +33,18 @@ const Register = () => {
           withCredentials: true,
         }
       );
-      setIsAuthorized(true);
-      toast.success(data.message);
-      setName("");
-      setEmail("");
-      setPassword("");
-      setPhone("");
-      setRole("");
+      if(data){
+
+        setIsAuthorized(true);
+        toast.success(data.message);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setPhone("");
+        setRole("");
+      }else{
+
+      }
     } catch (error: any) {
       toast.error(error.response.data.message);
     }

@@ -29,11 +29,14 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      setIsAuthorized(true);
-      toast.success(data.message);
-      setEmail("");
-      setPassword("");
-      setRole("");
+      if(data){
+
+        setIsAuthorized(true);
+        toast.success(data.message);
+        setEmail("");
+        setPassword("");
+        setRole("");
+      }
     } catch (error:any) {
       toast.error(error.response.data.message);
     }
