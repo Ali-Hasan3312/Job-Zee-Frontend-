@@ -17,9 +17,9 @@ const Login = () => {
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
+   
       await signInWithEmailAndPassword(auth,email,password)
-      const { data } = await axios.post(
+       await axios.post(
        `${import.meta.env.VITE_SERVER}/api/v1/user/login`,
         { email, role },
         {
@@ -28,18 +28,22 @@ const Login = () => {
           },
           withCredentials: true,
         }
-      );
-      if(data){
+      ).then((response)=>{
 
         setIsAuthorized(true);
-        toast.success(data.message);
+        toast.success(response.data.message);
         setEmail("");
         setPassword("");
         setRole("");
-      }
-    } catch (error:any) {
-      toast.error(error.response.data.message);
-    }
+      }).catch((error)=>{
+
+        toast.error(error.response.data.message);
+      })
+     
+
+      
+   
+   
   };
 
   if(isAuthorized){

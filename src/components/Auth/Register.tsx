@@ -21,9 +21,9 @@ const Register = () => {
 
   const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
+    
       const {user} = await createUserWithEmailAndPassword(auth,email,password)
-      const { data } = await axios.post(
+       await axios.post(
        `${import.meta.env.VITE_SERVER}/api/v1/user/register`,
         { name, phone, email, role, password,_id:user.uid },
         {
@@ -32,22 +32,24 @@ const Register = () => {
           },
           withCredentials: true,
         }
-      );
-      if(data){
+      ).then((response)=>{
 
         setIsAuthorized(true);
-        toast.success(data.message);
+        toast.success(response.data.message);
         setName("");
         setEmail("");
         setPassword("");
         setPhone("");
         setRole("");
-      }else{
+      }).catch((err)=>{
 
-      }
-    } catch (error: any) {
-      toast.error(error.response.data.message);
-    }
+        toast.error(err.response.data.message);
+      })
+      
+
+      
+   
+    
   };
 
   if (isAuthorized) {
